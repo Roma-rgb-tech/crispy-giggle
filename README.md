@@ -1,10 +1,14 @@
 # 🚀 Hackathon Project
+
 A FastAPI-based REST API built during a hackathon. Fully containerized with Docker, automatically tested and deployed to Railway via GitHub Actions CI/CD pipeline with security scanning powered by Trivy.
+
+🌍 **Live:** [crispy-giggle-production.up.railway.app](https://crispy-giggle-production.up.railway.app)
 
 ## ✨ Features
 
 - REST API built with FastAPI
-- Automatic API docs at `/docs` (Swagger UI)
+- Beautiful landing page at `/`
+- Automatic API docs at `/docs` (Swagger UI) and `/redoc`
 - Dockerized — runs the same everywhere
 - CI/CD pipeline: lint → test → security scan → deploy
 - Telegram notifications on every build
@@ -31,8 +35,9 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-App is available at **http://localhost:8000**  
-API documentation: **http://localhost:8000/docs**
+Local app: **http://localhost:8000**  
+Production: **https://crispy-giggle-production.up.railway.app**  
+API documentation: **https://crispy-giggle-production.up.railway.app/docs**
 
 ## 🗂️ Project Structure
 
@@ -40,9 +45,9 @@ API documentation: **http://localhost:8000/docs**
 crispy-giggle/
 ├── app/
 │   ├── __init__.py
-│   └── main.py           # FastAPI entry point
+│   └── main.py           # FastAPI entry point + landing page
 ├── tests/
-│   └── test_main.py      # Pytest test suite
+│   └── test_main.py      # Pytest test suite (16 tests)
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml        # Lint + Test + Trivy security scan
@@ -102,6 +107,8 @@ APP_PORT=8000
 pytest tests/ -v
 ```
 
+16 tests covering all endpoints: landing page, health check, full Items CRUD, and Messages.
+
 ## 🐳 Docker
 
 ```bash
@@ -121,8 +128,35 @@ This project uses [Trivy](https://trivy.dev) to scan for vulnerabilities on ever
 
 ## 📬 API Endpoints
 
-| Method | Endpoint  | Description        |
-|--------|-----------|--------------------|
-| GET    | `/`       | Health check       |
-| GET    | `/health` | Service status     |
-| GET    | `/docs`   | Swagger UI         |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Landing page |
+| GET | `/health` | Service status + timestamp |
+| GET | `/docs` | Swagger UI |
+| GET | `/redoc` | ReDoc documentation |
+| GET | `/items` | List all items |
+| POST | `/items` | Create a new item |
+| GET | `/items/{id}` | Get item by ID |
+| DELETE | `/items/{id}` | Delete item by ID |
+| GET | `/messages` | List all messages |
+| POST | `/messages` | Post a new message |
+
+### Item schema
+
+```json
+{
+  "name": "Widget",
+  "description": "Optional description",
+  "price": 9.99,
+  "in_stock": true
+}
+```
+
+### Message schema
+
+```json
+{
+  "text": "Hello world",
+  "author": "alice"
+}
+```
