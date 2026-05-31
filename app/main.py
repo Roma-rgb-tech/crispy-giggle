@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Optional
 import uvicorn
 
@@ -367,7 +367,7 @@ async def health():
     """Health check endpoint for Railway / uptime monitors."""
     return {
         "status": "ok",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(UTC).isoformat() + "Z",
         "version": "1.0.0",
     }
 
@@ -393,7 +393,7 @@ async def create_item(item: Item):
     """Create a new item."""
     global _item_counter
     _item_counter += 1
-    record = {"id": _item_counter, **item.model_dump(), "created_at": datetime.utcnow().isoformat()}
+    record = {"id": _item_counter, **item.model_dump(), "created_at": datetime.now(UTC).isoformat()}
     items_db[_item_counter] = record
     return record
 
@@ -421,7 +421,7 @@ async def post_message(msg: Message):
     record = {
         "id": len(messages_db) + 1,
         **msg.model_dump(),
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
     }
     messages_db.append(record)
     return record
