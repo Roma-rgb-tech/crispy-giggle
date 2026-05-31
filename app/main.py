@@ -12,7 +12,7 @@ app = FastAPI(
     description="A production-ready FastAPI service deployed on Railway",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc",
+    redoc_url=None,
 )
 
 app.add_middleware(
@@ -22,6 +22,37 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/redoc", include_in_schema=False)
+async def redoc_html():
+    html = """<!DOCTYPE html>
+<html>
+<head>
+    <title>ReDoc</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+    <style>body { margin: 0; padding: 0; }</style>
+</head>
+<body>
+    <redoc spec-url='/openapi.json'></redoc>
+    <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
+</body>
+</html>"""
+    return HTMLResponse(
+        content=html,
+        headers={
+            "Content-Security-Policy": (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+                "font-src 'self' https://fonts.gstatic.com; "
+                "img-src 'self' data: blob: https:; "
+                "worker-src blob:; "
+                "connect-src 'self';"
+            )
+        }
+    )
 
 # ─── Models ───────────────────────────────────────────────────────────────────
 
