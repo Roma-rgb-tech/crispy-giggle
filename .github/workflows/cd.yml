@@ -31,6 +31,6 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ${{ job.status == 'success' && '🚀 Задеплоєно!' || '💥 Deploy впав' }}
+            ${{ job.status == 'success' && '🚀 Deployed!' || '💥 Deploy failed' }}
             Repo: ${{ github.repository }}
             URL: ${{ secrets.RAILWAY_PUBLIC_URL }}
