@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@v0.35.0
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,13 +35,14 @@ jobs:
       - name: Build Docker image
         run: docker build -t hackathon-app:${{ github.sha }} .
 
-      - name: Trivy — scan Docker image
-        uses:  aquasecurity/trivy-action@v0.35.0
+      - name: Trivy — scan filesystem
+        uses: aquasecurity/trivy-action@v0.35.0
         with:
-          image-ref: "hackathon-app:${{ github.sha }}"
+          scan-type: "fs"
+          scan-ref: "."
           format: "table"
           exit-code: "1"
-          severity: "CRITICAL"
+          severity: "CRITICAL,HIGH"
 
       - name: Notify Telegram
         if: always()
