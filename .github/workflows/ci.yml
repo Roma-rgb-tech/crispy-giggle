@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  ci:
+    name: Lint · Test · Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint (ruff)
+        run: |
+          pip install ruff
+          ruff check app/
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+      - name: Build Docker image
+        run: docker build -t hackathon-app:${{ github.sha }} .
+
+      - name: Trivy — scan Docker image
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: "hackathon-app:${{ github.sha }}"
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL"
+
+      - name: Notify Telegram
+        if: always()
+        uses: appleboy/telegram-action@v0.1.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ job.status == 'success' && '✅' || '❌' }} CI — ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.event.head_commit.message }}
+            Actor: ${{ github.actor }}
