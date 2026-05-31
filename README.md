@@ -1,48 +1,31 @@
 # Hackathon Project
 
-## Швидкий старт
+## Quick Start
 
-```bash
-# 1. Клонуй репо
+# 1. Clone the repo
 git clone <repo-url> && cd <repo>
 
-# 2. Створи .env
+# 2. Create .env
 cp .env.example .env
 
-# 3. Запусти локально
+# 3. Run locally
 docker compose up --build
-# або без Docker:
+# or without Docker:
 pip install -r requirements.txt
 uvicorn app.main:app --reload
-```
+The application is available at http://localhost:8000
+API Documentation: http://localhost:8000/docs
 
-Застосунок доступний на http://localhost:8000
-Документація API: http://localhost:8000/docs
+# Structure
 
-## Структура
-
-```
 app/
-  main.py        # Точка входу FastAPI
+  main.py        # FastAPI entry point
 tests/
-  test_main.py   # Тести
+  test_main.py   # Tests
 .github/workflows/
   ci.yml         # Lint + Test + Trivy scan
-  cd.yml         # Автодеплой на Railway
-```
+  cd.yml         # Auto-deploy to Railway
 
-## GitHub Secrets (налаштовує DevSecOps)
 
-| Secret | Опис |
-|--------|------|
-| `RAILWAY_TOKEN` | API токен Railway |
-| `RAILWAY_SERVICE_NAME` | Назва сервісу в Railway |
-| `RAILWAY_PUBLIC_URL` | Публічний URL після деплою |
-| `TELEGRAM_TO` | Chat ID для нотифікацій |
-| `TELEGRAM_TOKEN` | Telegram Bot Token |
-
-## CI/CD Flow
-
-```
+# CI/CD Flow
 push → CI (lint → test → trivy) → CD (railway deploy) → Telegram
-```
