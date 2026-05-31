@@ -1,4 +1,5 @@
 # 🚀 Hackathon Project
+<img width="1459" height="975" alt="image" src="https://github.com/user-attachments/assets/2523a2fb-d946-4de2-9769-f4cadb80a5d2" />
 
 A FastAPI-based REST API built during a hackathon. Fully containerized with Docker, automatically tested and deployed to Railway via GitHub Actions CI/CD pipeline with security scanning powered by Trivy.
 
