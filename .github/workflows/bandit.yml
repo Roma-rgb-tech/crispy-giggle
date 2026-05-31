@@ -49,5 +49,4 @@ jobs:
         run: |
           bandit -r app/ \
             --severity-level high \
-            --confidence-level high \
-            --exit-zero false
+            --confidence-level high
