@@ -46,8 +46,7 @@ jobs:
           category: bandit
 
       - name: Fail on HIGH / CRITICAL findings
-        run: |
+       run: |
           bandit -r app/ \
             --severity-level high \
-            --confidence-level high \
-            --exit-zero false
+            --confidence-level high
