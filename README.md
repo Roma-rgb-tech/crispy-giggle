@@ -1,4 +1,4 @@
-# 🚀 Hackathon Project
+# 🚀 DevSecOps-pipeline-demo
 <img width="1700" height="955" alt="image" src="https://github.com/user-attachments/assets/d2ca6470-e439-4fc1-b53f-b6cb424afe57" />
 
 
