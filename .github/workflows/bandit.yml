@@ -1,25 +1,53 @@
 name: Bandit
+
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     - cron: '41 17 * * 0'
 
 jobs:
   bandit:
+    name: Bandit SAST
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       security-events: write
-      actions: read 
+      actions: read
 
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Bandit Scan
-        uses: shundor/python-bandit-scan@ab1d87dfccc5a0ffab88be3aaac6ffe35c10d6cd
-        with: 
-          exit_zero: true 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Bandit
+        run: pip install bandit[sarif]
+
+      - name: Run Bandit scan
+        run: |
+          bandit -r app/ \
+            --format sarif \
+            --output bandit-results.sarif \
+            --severity-level medium \
+            --confidence-level medium
+        continue-on-error: true
+
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: bandit-results.sarif
+          category: bandit
+
+      - name: Fail on HIGH / CRITICAL findings
+        run: |
+          bandit -r app/ \
+            --severity-level high \
+            --confidence-level high \
+            --exit-zero false
