@@ -4,7 +4,7 @@
 
 A FastAPI-based REST API built during a hackathon. Fully containerized with Docker, automatically tested and deployed to Railway via GitHub Actions CI/CD pipeline with security scanning powered by Trivy.
 
-🌍 **Live:** [crispy-giggle-production.up.railway.app](https://crispy-giggle-production.up.railway.app)
+🌍 **Live:** [devsecops-pipeline-demo-production.up.railway.app](https://devsecops-pipeline-demo-production.up.railway.app/)
 
 ## ✨ Features
 
@@ -38,8 +38,8 @@ uvicorn app.main:app --reload
 ```
 
 Local app: **http://localhost:8000**  
-Production: **https://crispy-giggle-production.up.railway.app**  
-API documentation: **https://crispy-giggle-production.up.railway.app/docs**
+Production: **devsecops-pipeline-demo-production.up.railway.app**  
+API documentation: **https://devsecops-pipeline-demo-production.up.railway.app/docs**
 
 ## 🗂️ Project Structure
 
