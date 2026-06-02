@@ -15,6 +15,7 @@ spec:
       containers:
         - name: fastapi-app
           image: ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8000
           env:
