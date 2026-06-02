@@ -41,6 +41,17 @@ Local app: **http://localhost:8000**
 Production: **devsecops-pipeline-demo-production.up.railway.app**  
 API documentation: **https://devsecops-pipeline-demo-production.up.railway.app/docs**
 
+## ☸️ Kubernetes (local)
+
+Manifests available in `k8s/` folder for local deployment via minikube.
+
+```bash
+eval $(minikube docker-env)
+docker build -t ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:latest .
+kubectl apply -f k8s/
+minikube service fastapi-service
+```
+
 ## 🗂️ Project Structure
 
 ```
