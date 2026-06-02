@@ -35,6 +35,12 @@ jobs:
       - name: Build Docker image
         run: docker build -t hackathon-app:${{ github.sha }} .
 
+      - name: Push to GHCR
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build -t ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }} .
+          docker push ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }}
+
       - name: Trivy — scan filesystem
         uses: aquasecurity/trivy-action@v0.35.0
         with:
@@ -43,6 +49,7 @@ jobs:
           format: "table"
           exit-code: "1"
           severity: "CRITICAL,HIGH"
+
 
       - name: Notify Telegram
         if: always()
