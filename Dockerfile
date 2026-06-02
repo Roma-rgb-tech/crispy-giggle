@@ -7,6 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 COPY app/ ./app/
+
 RUN adduser --disabled-password --gecos "" appuser
 USER appuser
 
