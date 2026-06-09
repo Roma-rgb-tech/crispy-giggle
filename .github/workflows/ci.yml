@@ -39,6 +39,7 @@ jobs:
           curl -O -L "https://github.com/grafana/alloy/releases/latest/download/alloy-linux-amd64.zip"
           unzip alloy-linux-amd64.zip
           sudo mv alloy-linux-amd64 /usr/local/bin/alloy
+          sudo chmod +x /usr/local/bin/alloy
           
       - name: Check Alloy formatting
         run: alloy fmt --check infra/alloy/config.alloy
