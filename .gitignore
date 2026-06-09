@@ -16,7 +16,7 @@ venv/
 
 
 .docker/
-
+infra/alloy/config.alloy
 
 .terraform/
 *.tfstate
