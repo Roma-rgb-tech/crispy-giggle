@@ -18,6 +18,10 @@ venv/
 .docker/
 
 
+.terraform/
+*.tfstate
+*.tfstate.backup
+
 .vscode/
 .idea/
 *.swp

@@ -68,5 +68,3 @@ jobs:
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.event.head_commit.message }}
             Actor: ${{ github.actor }}
-
-
