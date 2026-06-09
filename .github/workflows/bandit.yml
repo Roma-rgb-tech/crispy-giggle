@@ -50,3 +50,6 @@ jobs:
           bandit -r app/ \
             --severity-level high \
             --confidence-level high
+
+
+            
