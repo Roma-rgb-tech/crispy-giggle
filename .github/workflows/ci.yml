@@ -33,6 +33,9 @@ jobs:
           pip install ruff
           ruff check app/
 
+      - name: Check Alloy formatting
+        run: alloy fmt --check infra/alloy/config.alloy
+
       - name: Run tests
         run: pytest tests/ -v
 
