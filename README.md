@@ -175,7 +175,8 @@ This project uses [Trivy](https://trivy.dev) to scan for vulnerabilities on ever
 ```
 
 ## 📊 Monitoring & Observability
-![Grafana dashboard displaying request count and latency panels with dark theme controls](image.png)
+<img width="1689" height="923" alt="image" src="https://github.com/user-attachments/assets/6c944b3d-be5d-4384-b7d6-0ab92f30c6f7" />
+
 
 This project is fully instrumented with a Prometheus + Loki + Grafana Cloud stack.
 
