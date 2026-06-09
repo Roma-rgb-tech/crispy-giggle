@@ -173,3 +173,44 @@ This project uses [Trivy](https://trivy.dev) to scan for vulnerabilities on ever
   "author": "alice"
 }
 ```
+
+## 📊 Monitoring & Observability
+![Grafana dashboard displaying request count and latency panels with dark theme controls](image.png)
+
+This project is fully instrumented with a Prometheus + Loki + Grafana Cloud stack.
+
+### Stack
+
+| Tool | Role | Integration |
+|------|------|-------------|
+| **Prometheus** | Metrics collection | `prometheus-fastapi-instrumentator` exposes `/metrics` |
+| **Loki** | Log aggregation | `python-logging-loki` pushes structured JSON logs |
+| **Grafana Cloud** | Visualisation & alerting | Prometheus + Loki as datasources |
+
+### Dashboard panels
+
+Live dashboard: [grafana.net/d/fea3x93t76328c](https://minicosmos2942.grafana.net/d/fea3x93t76328c/fastapi-obsrvability)
+
+- **Total requests** — 24h counter (49 total during initial load testing)
+- **Requests by endpoint** — GET `/`, `/docs`, `/redoc`, `/health`, `/openapi.json`
+- **Requests Average Duration** — per-endpoint heatmap (675–687 ms range)
+- **Percent of 2xx Requests** — success rate over time
+- **Percent of 5xx Requests** — error rate over time
+- **P99 Request Duration** — tail latency tracking
+- **Requests per second** — throughput graph
+
+### Local setup
+
+The app auto-exposes metrics on startup via `prometheus-fastapi-instrumentator`:
+
+```python
+# app/main.py
+from prometheus_fastapi_instrumentator import Instrumentator
+Instrumentator().instrument(app).expose(app)
+```
+
+Logs are pushed to Loki in structured JSON format via `python-logging-loki`.
+
+To connect your own Grafana instance, add these datasources:
+- **Prometheus** → scrape `http://localhost:8000/metrics`
+- **Loki** → configure `python-logging-loki` with your Loki push URL
