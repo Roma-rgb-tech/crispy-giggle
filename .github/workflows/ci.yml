@@ -42,7 +42,7 @@ jobs:
           sudo chmod +x /usr/local/bin/alloy
           
       - name: Check Alloy formatting
-        run: alloy fmt --check infra/alloy/config.alloy
+        run: alloy validate infra/alloy/config.alloy
 
       - name: Run tests
         run: pytest tests/ -v
