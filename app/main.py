@@ -1,11 +1,16 @@
 import os
-from fastapi import FastAPI, HTTPException
+import time 
+
+from fastapi import FastAPI, HTTPException, Request 
+from prometheus_fastapi_instrumentator import Instrumentator
+from app.logger import logger
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import datetime, UTC
 from typing import Optional
 import uvicorn
+
 
 app = FastAPI(
     title="🚀 Hackathon API",
@@ -15,6 +20,21 @@ app = FastAPI(
     redoc_url=None,
 )
 
+Instrumentator().instrument(app).expose(app)
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    t0 = time.time()
+    response = await call_next(request)
+    logger.info("http_request", extra={
+        "method":      request.method,
+        "path":        request.url.path,
+        "status_code": response.status_code,
+        "duration_ms": round((time.time() - t0) * 1000, 2),
+        "client_ip":   request.client.host,
+    })
+    return response
+  
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
