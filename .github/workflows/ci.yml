@@ -52,13 +52,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }}
-
+          
+          
+          
       - name: Trivy — scan filesystem
         uses: aquasecurity/trivy-action@v0.35.0
         with:

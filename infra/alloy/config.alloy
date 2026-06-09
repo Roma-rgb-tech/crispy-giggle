@@ -8,10 +8,10 @@ prometheus.scrape "fastapi" {
 
 prometheus.remote_write "grafana_cloud" {
   endpoint {
-    url = env("GRAFANA_PROMETHEUS_URL")
+    url = sys.env("GRAFANA_PROMETHEUS_URL")
     basic_auth {
-      username = env("GRAFANA_USER")
-      password = env("GRAFANA_API_KEY")
+    username = sys.env("GRAFANA_USER")
+    password = sys.env("GRAFANA_API_KEY")
     }
   }
 }
