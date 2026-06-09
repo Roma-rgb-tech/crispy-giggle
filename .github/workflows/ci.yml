@@ -14,7 +14,6 @@ jobs:
   ci:
     name: Lint · Test · Scan
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,28 +32,32 @@ jobs:
           pip install ruff
           ruff check app/
 
-
       - name: Install Grafana Alloy
         run: |
           curl -O -L "https://github.com/grafana/alloy/releases/latest/download/alloy-linux-amd64.zip"
           unzip alloy-linux-amd64.zip
           sudo mv alloy-linux-amd64 /usr/local/bin/alloy
           sudo chmod +x /usr/local/bin/alloy
-          
-      - name: Check Alloy formatting
+
+      - name: Check Alloy config
         run: alloy validate infra/alloy/config.alloy
 
       - name: Run tests
         run: pytest tests/ -v
 
-      - name: Build Docker image
-        run: docker build -t hackathon-app:${{ github.sha }} .
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push to GHCR
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker build -t ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }} .
-          docker push ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }}
 
       - name: Trivy — scan filesystem
         uses: aquasecurity/trivy-action@v0.35.0
@@ -64,7 +67,6 @@ jobs:
           format: "table"
           exit-code: "1"
           severity: "CRITICAL,HIGH"
-
 
       - name: Notify Telegram
         if: always()
@@ -77,5 +79,3 @@ jobs:
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.event.head_commit.message }}
             Actor: ${{ github.actor }}
-
-
