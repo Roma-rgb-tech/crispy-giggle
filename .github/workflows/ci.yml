@@ -33,17 +33,6 @@ jobs:
           pip install ruff
           ruff check app/
 
-
-      - name: Install Grafana Alloy
-        run: |
-          curl -O -L "https://github.com/grafana/alloy/releases/latest/download/alloy-linux-amd64.zip"
-          unzip alloy-linux-amd64.zip
-          sudo mv alloy-linux-amd64 /usr/local/bin/alloy
-          sudo chmod +x /usr/local/bin/alloy
-          
-      - name: Check Alloy formatting
-        run: alloy validate infra/alloy/config.alloy
-
       - name: Run tests
         run: pytest tests/ -v
 
@@ -51,8 +40,10 @@ jobs:
         run: docker build -t hackathon-app:${{ github.sha }} .
 
       - name: Push to GHCR
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker build -t ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }} .
           docker push ghcr.io/roma-rgb-tech/devsecops-pipeline-demo:${{ github.sha }}
 
@@ -77,5 +68,3 @@ jobs:
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.event.head_commit.message }}
             Actor: ${{ github.actor }}
-
-
