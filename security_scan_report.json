@@ -1,0 +1,55 @@
+{
+    "metadata": {
+        "repository": "Roma-rgb-tech/devsecops-pipeline-demo",
+        "image": "ghcr.io/roma-rgb-tech/devsecops-demo:v1.0.3",
+        "scan_tool": "Trivy",
+        "timestamp": "2026-06-10T13:41:00Z"
+    },
+    "policy_evaluation": {
+        "fail_pipeline_on_critical": true,
+        "action_required": true
+    },
+    "summary": {
+        "CRITICAL": 1,
+        "HIGH": 1,
+        "MEDIUM": 0,
+        "LOW": 4
+    },
+    "results": [
+        {
+            "Target": "python-app/requirements.txt",
+            "Class": "lang-pkgs",
+            "Type": "pip",
+            "Vulnerabilities": [
+                {
+                    "VulnerabilityID": "CVE-2026-11111",
+                    "PkgName": "requests",
+                    "InstalledVersion": "2.31.0",
+                    "FixedVersion": "2.32.0",
+                    "Severity": "HIGH",
+                    "Title": "Information Exposure",
+                    "Description": "A vulnerability in requests allows unintended information exposure under certain conditions."
+                },
+                {
+                    "VulnerabilityID": "CVE-2025-22222",
+                    "PkgName": "urllib3",
+                    "InstalledVersion": "1.26.18",
+                    "FixedVersion": "1.26.19",
+                    "Severity": "CRITICAL",
+                    "Title": "Remote Code Execution",
+                    "Description": "RCE in urllib3 when parsing specially crafted requests."
+                }
+            ]
+        },
+        {
+            "Target": "Dockerfile",
+            "Class": "config",
+            "Type": "dockerfile",
+            "Vulnerabilities": []
+        }
+    ],
+    "notifications": {
+        "telegram_alerts_enabled": true,
+        "telegram_chat_id": "-1001234567890"
+    }
+}
